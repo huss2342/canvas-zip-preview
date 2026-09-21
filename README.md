@@ -20,7 +20,7 @@ When a student submitted a `.zip`, click the orange **Preview ZIP** button besid
 - Compressed and expanded sizes, modified times, compression method, and CRC-32
 - Search/filter and a one-click copyable file list
 - In-page previews for text, source code, common images, and a hex view for other files
-- Normal, large, and full-screen preview window sizes, plus drag-to-resize
+- Normal, large, and full-screen preview window sizes, remembered across sessions, plus drag-to-resize
 - Image Fit controls and 25%–400% zoom for screenshots and diagrams
 - Warnings for encrypted entries, suspicious extraction paths, and unusually high compression ratios
 - ZIP64 directory support and filename decoding for UTF-8 and legacy CP437 archives

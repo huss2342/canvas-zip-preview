@@ -5,6 +5,8 @@
   const MAX_ARCHIVE_BYTES = 250 * 1024 * 1024;
   const MAX_TEXT_PREVIEW = 2 * 1024 * 1024;
   const MAX_IMAGE_PREVIEW = 12 * 1024 * 1024;
+  const WINDOW_SIZE_KEY = "preferredPreviewWindowSize";
+  const WINDOW_SIZES = new Set(["normal", "large", "full"]);
   const TEXT_EXTENSIONS = new Set([
     "txt", "md", "markdown", "csv", "tsv", "json", "jsonl", "xml", "yaml", "yml", "toml", "ini", "cfg", "conf",
     "html", "htm", "css", "scss", "sass", "less", "js", "jsx", "mjs", "cjs", "ts", "tsx", "vue", "svelte",
@@ -73,7 +75,9 @@
   async function openArchive(url, fileName, attachment) {
     closePanel();
     activeAttachment = attachment;
-    const panel = createPanel(fileName);
+    const preferredWindowSize = await getPreferredWindowSize();
+    if (!attachment.isConnected) return;
+    const panel = createPanel(fileName, preferredWindowSize);
     activePanel = panel;
     document.body.append(panel);
     panel.querySelector(".czp-close").focus();
@@ -168,10 +172,10 @@
     });
   }
 
-  function createPanel(fileName) {
+  function createPanel(fileName, preferredWindowSize = "normal") {
     const panel = document.createElement("section");
     panel.className = "czp-panel";
-    panel.dataset.size = "normal";
+    panel.dataset.size = WINDOW_SIZES.has(preferredWindowSize) ? preferredWindowSize : "normal";
     panel.setAttribute("role", "dialog");
     panel.setAttribute("aria-modal", "false");
     panel.setAttribute("aria-label", `ZIP preview: ${fileName}`);
@@ -185,9 +189,9 @@
           <label class="czp-window-size">
             <span>Window</span>
             <select aria-label="Preview window size">
-              <option value="normal">Normal</option>
-              <option value="large">Large</option>
-              <option value="full">Full screen</option>
+              <option value="normal"${panel.dataset.size === "normal" ? " selected" : ""}>Normal</option>
+              <option value="large"${panel.dataset.size === "large" ? " selected" : ""}>Large</option>
+              <option value="full"${panel.dataset.size === "full" ? " selected" : ""}>Full screen</option>
             </select>
           </label>
           <button class="czp-close" type="button" aria-label="Close ZIP preview">${closeIcon()}</button>
@@ -205,11 +209,23 @@
       panel.style.removeProperty("width");
       panel.style.removeProperty("height");
       panel.dataset.size = event.currentTarget.value;
+      chrome.storage.local.set({ [WINDOW_SIZE_KEY]: event.currentTarget.value }).catch(() => {
+        // The size still applies to this window if extension storage is unavailable.
+      });
     });
     panel.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closePanel();
     });
     return panel;
+  }
+
+  async function getPreferredWindowSize() {
+    try {
+      const stored = await chrome.storage.local.get(WINDOW_SIZE_KEY);
+      return WINDOW_SIZES.has(stored[WINDOW_SIZE_KEY]) ? stored[WINDOW_SIZE_KEY] : "normal";
+    } catch {
+      return "normal";
+    }
   }
 
   function setLoading(panel, message, percent) {

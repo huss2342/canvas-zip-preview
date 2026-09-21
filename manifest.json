@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Canvas ZIP Preview",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Inspect ZIP submissions inside Canvas SpeedGrader without downloading and opening them manually.",
   "minimum_chrome_version": "109",
   "action": {
@@ -11,6 +11,7 @@
   "background": {
     "service_worker": "background.js"
   },
+  "permissions": ["storage"],
   "host_permissions": [
     "https://*.instructure.com/*",
     "https://*.amazonaws.com/*",

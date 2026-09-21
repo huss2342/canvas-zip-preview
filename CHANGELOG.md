@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 — 2026-09-21
+
+- Remember the selected Normal, Large, or Full-screen window size across ZIP previews and browser sessions.
+
 ## 1.1.0 — 2026-09-21
 
 - Added Normal, Large, and Full-screen preview window sizes.
