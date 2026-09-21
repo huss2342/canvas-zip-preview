@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Canvas ZIP Preview</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { color: #202532; font: 13px/1.45 system-ui, sans-serif; margin: 0; min-width: 310px; }
+    header { align-items: center; background: linear-gradient(115deg,#692500,#c34a09,#e46a1c); color: white; display: flex; gap: 10px; padding: 17px; }
+    header svg { fill: none; height: 30px; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; width: 30px; }
+    h1 { font-size: 15px; margin: 0; }
+    main { padding: 16px 17px 18px; }
+    .status { align-items: center; background: #eef8f3; border-radius: 8px; color: #16724f; display: flex; font-weight: 650; gap: 7px; padding: 9px 10px; }
+    .dot { background: #20a66f; border-radius: 50%; height: 8px; width: 8px; }
+    p { color: #5e6776; margin: 12px 0 0; }
+    ol { color: #394150; margin: 10px 0 0; padding-left: 20px; }
+    li + li { margin-top: 5px; }
+    small { border-top: 1px solid #e3e6eb; color: #808896; display: block; margin-top: 14px; padding-top: 11px; }
+  </style>
+</head>
+<body>
+  <header>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h6l4 4V20a.5.5 0 0 1-.5.5h-9A.5.5 0 0 1 7 20V3.5Z"/><path d="M13 3.5v4h4M10 5.5h2M10 8.5h2M10 11.5h2M9.75 14.5h2.5v3h-2.5z"/></svg>
+    <h1>Canvas ZIP Preview</h1>
+  </header>
+  <main>
+    <div class="status"><span class="dot"></span>Ready for Canvas SpeedGrader</div>
+    <p>On a SpeedGrader page:</p>
+    <ol><li>Find a submitted <strong>.zip</strong> file.</li><li>Click the orange <strong>Preview ZIP</strong> button.</li><li>Select a file to inspect it in place.</li></ol>
+    <small>Files are read in memory. The extension never extracts submission contents to your disk.</small>
+  </main>
+</body>
+</html>
