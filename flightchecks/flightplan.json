@@ -1,0 +1,379 @@
+{
+  "repo": "huss2342/canvas-zip-preview",
+  "sourceHashes": {
+    "readme_266147490538": "3e9b2a5dd193984630a3ea681d03c2a44984f9acbd6e64f02c8a3510b099f43a",
+    "readme_8f6b06164083": "3e9b2a5dd193984630a3ea681d03c2a44984f9acbd6e64f02c8a3510b099f43a"
+  },
+  "claims": [
+    {
+      "kind": "script_exists",
+      "params": {
+        "script": "test"
+      },
+      "id": "c_079a1cec5f",
+      "sourceId": "readme_8f6b06164083",
+      "occurrences": [
+        {
+          "quote": "npm test",
+          "location": {
+            "sourceId": "readme_8f6b06164083",
+            "startOffset": 2783,
+            "endOffset": 2791,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 47,
+            "lineEnd": 47
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "PRIVACY.md"
+      },
+      "id": "c_1284e1d38e",
+      "sourceId": "readme_8f6b06164083",
+      "occurrences": [
+        {
+          "quote": "PRIVACY.md",
+          "location": {
+            "sourceId": "readme_8f6b06164083",
+            "startOffset": 309,
+            "endOffset": 319,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 6,
+            "lineEnd": 6
+          }
+        },
+        {
+          "quote": "PRIVACY.md",
+          "location": {
+            "sourceId": "readme_8f6b06164083",
+            "startOffset": 1862,
+            "endOffset": 1872,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 33,
+            "lineEnd": 33
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "canvas_extension_zip"
+      },
+      "id": "c_36afdecd75",
+      "sourceId": "readme_266147490538",
+      "occurrences": [
+        {
+          "quote": "canvas_extension_zip",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 537,
+            "endOffset": 557,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 10,
+            "lineEnd": 14
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "SECURITY.md"
+      },
+      "id": "c_38c0810f62",
+      "sourceId": "readme_266147490538",
+      "occurrences": [
+        {
+          "quote": "SECURITY.md",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 334,
+            "endOffset": 345,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 6,
+            "lineEnd": 6
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "script_exists",
+      "params": {
+        "script": "test"
+      },
+      "id": "c_3b5c167f99",
+      "sourceId": "readme_266147490538",
+      "occurrences": [
+        {
+          "quote": "npm test",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 2783,
+            "endOffset": 2791,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 47,
+            "lineEnd": 47
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "manifest.json"
+      },
+      "id": "c_55d281e691",
+      "sourceId": "readme_8f6b06164083",
+      "occurrences": [
+        {
+          "quote": "manifest.json",
+          "location": {
+            "sourceId": "readme_8f6b06164083",
+            "startOffset": 2167,
+            "endOffset": 2180,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 37,
+            "lineEnd": 37
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "CONTRIBUTING.md"
+      },
+      "id": "c_59921925ed",
+      "sourceId": "readme_8f6b06164083",
+      "occurrences": [
+        {
+          "quote": "CONTRIBUTING.md",
+          "location": {
+            "sourceId": "readme_8f6b06164083",
+            "startOffset": 2972,
+            "endOffset": 2987,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 49,
+            "lineEnd": 49
+          }
+        },
+        {
+          "quote": "CONTRIBUTING.md",
+          "location": {
+            "sourceId": "readme_8f6b06164083",
+            "startOffset": 2989,
+            "endOffset": 3004,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 49,
+            "lineEnd": 49
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "SECURITY.md"
+      },
+      "id": "c_6fb2cdf6c6",
+      "sourceId": "readme_8f6b06164083",
+      "occurrences": [
+        {
+          "quote": "SECURITY.md",
+          "location": {
+            "sourceId": "readme_8f6b06164083",
+            "startOffset": 334,
+            "endOffset": 345,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 6,
+            "lineEnd": 6
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "PRIVACY.md"
+      },
+      "id": "c_8c28244c22",
+      "sourceId": "readme_266147490538",
+      "occurrences": [
+        {
+          "quote": "PRIVACY.md",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 309,
+            "endOffset": 319,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 6,
+            "lineEnd": 6
+          }
+        },
+        {
+          "quote": "PRIVACY.md",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 1862,
+            "endOffset": 1872,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 33,
+            "lineEnd": 33
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "LICENSE"
+      },
+      "id": "c_aef8ff0be3",
+      "sourceId": "readme_266147490538",
+      "occurrences": [
+        {
+          "quote": "LICENSE",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 288,
+            "endOffset": 295,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 6,
+            "lineEnd": 6
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "canvas_extension_zip"
+      },
+      "id": "c_b94edf98c3",
+      "sourceId": "readme_8f6b06164083",
+      "occurrences": [
+        {
+          "quote": "canvas_extension_zip",
+          "location": {
+            "sourceId": "readme_8f6b06164083",
+            "startOffset": 537,
+            "endOffset": 557,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 10,
+            "lineEnd": 14
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "CONTRIBUTING.md"
+      },
+      "id": "c_bdf0298482",
+      "sourceId": "readme_266147490538",
+      "occurrences": [
+        {
+          "quote": "CONTRIBUTING.md",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 2972,
+            "endOffset": 2987,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 49,
+            "lineEnd": 49
+          }
+        },
+        {
+          "quote": "CONTRIBUTING.md",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 2989,
+            "endOffset": 3004,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 49,
+            "lineEnd": 49
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "LICENSE"
+      },
+      "id": "c_f15db08428",
+      "sourceId": "readme_8f6b06164083",
+      "occurrences": [
+        {
+          "quote": "LICENSE",
+          "location": {
+            "sourceId": "readme_8f6b06164083",
+            "startOffset": 288,
+            "endOffset": 295,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 6,
+            "lineEnd": 6
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "manifest.json"
+      },
+      "id": "c_f23f0d0ccd",
+      "sourceId": "readme_266147490538",
+      "occurrences": [
+        {
+          "quote": "manifest.json",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 2167,
+            "endOffset": 2180,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 37,
+            "lineEnd": 37
+          }
+        }
+      ],
+      "tier": "static"
+    }
+  ]
+}
