@@ -1,4 +1,5 @@
 # Canvas ZIP Preview
+<img width="1727" height="900" alt="image" src="https://github.com/user-attachments/assets/e13f2791-cd4b-4556-b545-951a451394e8" />
 
 A small, build-free Chrome extension that adds a **Preview ZIP** button beside ZIP submissions in Canvas SpeedGrader.
 
