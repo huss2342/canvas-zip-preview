@@ -1,0 +1,15 @@
+name: Ground Control
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ground-control:
+    uses: rcwoshimao/hackwashu-2026/.github/workflows/ground-control-reusable.yml@main
+    with:
+      server: "https://ground-control-washu26.azurewebsites.net"
+    secrets:
+      token: ${{ secrets.GROUND_CONTROL_TOKEN }}
