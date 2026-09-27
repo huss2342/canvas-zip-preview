@@ -1,68 +1,9 @@
 {
   "repo": "huss2342/canvas-zip-preview",
   "sourceHashes": {
-    "readme_266147490538": "dd8c50f1793d8d33039d2e83afcc757a6bb451dc96414fcbd655b9459bf69184",
-    "readme_8f6b06164083": "dd8c50f1793d8d33039d2e83afcc757a6bb451dc96414fcbd655b9459bf69184"
+    "readme_266147490538": "dd8c50f1793d8d33039d2e83afcc757a6bb451dc96414fcbd655b9459bf69184"
   },
   "claims": [
-    {
-      "kind": "script_exists",
-      "params": {
-        "script": "test"
-      },
-      "id": "c_079a1cec5f",
-      "sourceId": "readme_8f6b06164083",
-      "occurrences": [
-        {
-          "quote": "npm test",
-          "location": {
-            "sourceId": "readme_8f6b06164083",
-            "startOffset": 2806,
-            "endOffset": 2814,
-            "kind": "file",
-            "path": "README.md",
-            "lineStart": 47,
-            "lineEnd": 47
-          }
-        }
-      ],
-      "tier": "static"
-    },
-    {
-      "kind": "file_exists",
-      "params": {
-        "path": "PRIVACY.md"
-      },
-      "id": "c_1284e1d38e",
-      "sourceId": "readme_8f6b06164083",
-      "occurrences": [
-        {
-          "quote": "PRIVACY.md",
-          "location": {
-            "sourceId": "readme_8f6b06164083",
-            "startOffset": 309,
-            "endOffset": 319,
-            "kind": "file",
-            "path": "README.md",
-            "lineStart": 6,
-            "lineEnd": 6
-          }
-        },
-        {
-          "quote": "PRIVACY.md",
-          "location": {
-            "sourceId": "readme_8f6b06164083",
-            "startOffset": 1885,
-            "endOffset": 1895,
-            "kind": "file",
-            "path": "README.md",
-            "lineStart": 33,
-            "lineEnd": 33
-          }
-        }
-      ],
-      "tier": "static"
-    },
     {
       "kind": "file_exists",
       "params": {
@@ -104,99 +45,6 @@
             "path": "README.md",
             "lineStart": 47,
             "lineEnd": 47
-          }
-        }
-      ],
-      "tier": "static"
-    },
-    {
-      "kind": "file_exists",
-      "params": {
-        "path": "manifest.json"
-      },
-      "id": "c_55d281e691",
-      "sourceId": "readme_8f6b06164083",
-      "occurrences": [
-        {
-          "quote": "manifest.json",
-          "location": {
-            "sourceId": "readme_8f6b06164083",
-            "startOffset": 566,
-            "endOffset": 579,
-            "kind": "file",
-            "path": "README.md",
-            "lineStart": 10,
-            "lineEnd": 14
-          }
-        },
-        {
-          "quote": "manifest.json",
-          "location": {
-            "sourceId": "readme_8f6b06164083",
-            "startOffset": 2190,
-            "endOffset": 2203,
-            "kind": "file",
-            "path": "README.md",
-            "lineStart": 37,
-            "lineEnd": 37
-          }
-        }
-      ],
-      "tier": "static"
-    },
-    {
-      "kind": "file_exists",
-      "params": {
-        "path": "CONTRIBUTING.md"
-      },
-      "id": "c_59921925ed",
-      "sourceId": "readme_8f6b06164083",
-      "occurrences": [
-        {
-          "quote": "CONTRIBUTING.md",
-          "location": {
-            "sourceId": "readme_8f6b06164083",
-            "startOffset": 2995,
-            "endOffset": 3010,
-            "kind": "file",
-            "path": "README.md",
-            "lineStart": 49,
-            "lineEnd": 49
-          }
-        },
-        {
-          "quote": "CONTRIBUTING.md",
-          "location": {
-            "sourceId": "readme_8f6b06164083",
-            "startOffset": 3012,
-            "endOffset": 3027,
-            "kind": "file",
-            "path": "README.md",
-            "lineStart": 49,
-            "lineEnd": 49
-          }
-        }
-      ],
-      "tier": "static"
-    },
-    {
-      "kind": "file_exists",
-      "params": {
-        "path": "SECURITY.md"
-      },
-      "id": "c_6fb2cdf6c6",
-      "sourceId": "readme_8f6b06164083",
-      "occurrences": [
-        {
-          "quote": "SECURITY.md",
-          "location": {
-            "sourceId": "readme_8f6b06164083",
-            "startOffset": 334,
-            "endOffset": 345,
-            "kind": "file",
-            "path": "README.md",
-            "lineStart": 6,
-            "lineEnd": 6
           }
         }
       ],
@@ -290,29 +138,6 @@
             "path": "README.md",
             "lineStart": 49,
             "lineEnd": 49
-          }
-        }
-      ],
-      "tier": "static"
-    },
-    {
-      "kind": "file_exists",
-      "params": {
-        "path": "LICENSE"
-      },
-      "id": "c_f15db08428",
-      "sourceId": "readme_8f6b06164083",
-      "occurrences": [
-        {
-          "quote": "LICENSE",
-          "location": {
-            "sourceId": "readme_8f6b06164083",
-            "startOffset": 288,
-            "endOffset": 295,
-            "kind": "file",
-            "path": "README.md",
-            "lineStart": 6,
-            "lineEnd": 6
           }
         }
       ],
