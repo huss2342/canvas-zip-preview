@@ -1,8 +1,8 @@
 {
   "repo": "huss2342/canvas-zip-preview",
   "sourceHashes": {
-    "readme_266147490538": "3e9b2a5dd193984630a3ea681d03c2a44984f9acbd6e64f02c8a3510b099f43a",
-    "readme_8f6b06164083": "3e9b2a5dd193984630a3ea681d03c2a44984f9acbd6e64f02c8a3510b099f43a"
+    "readme_266147490538": "dd8c50f1793d8d33039d2e83afcc757a6bb451dc96414fcbd655b9459bf69184",
+    "readme_8f6b06164083": "dd8c50f1793d8d33039d2e83afcc757a6bb451dc96414fcbd655b9459bf69184"
   },
   "claims": [
     {
@@ -17,8 +17,8 @@
           "quote": "npm test",
           "location": {
             "sourceId": "readme_8f6b06164083",
-            "startOffset": 2783,
-            "endOffset": 2791,
+            "startOffset": 2806,
+            "endOffset": 2814,
             "kind": "file",
             "path": "README.md",
             "lineStart": 47,
@@ -52,35 +52,12 @@
           "quote": "PRIVACY.md",
           "location": {
             "sourceId": "readme_8f6b06164083",
-            "startOffset": 1862,
-            "endOffset": 1872,
+            "startOffset": 1885,
+            "endOffset": 1895,
             "kind": "file",
             "path": "README.md",
             "lineStart": 33,
             "lineEnd": 33
-          }
-        }
-      ],
-      "tier": "static"
-    },
-    {
-      "kind": "file_exists",
-      "params": {
-        "path": "canvas_extension_zip"
-      },
-      "id": "c_36afdecd75",
-      "sourceId": "readme_266147490538",
-      "occurrences": [
-        {
-          "quote": "canvas_extension_zip",
-          "location": {
-            "sourceId": "readme_266147490538",
-            "startOffset": 537,
-            "endOffset": 557,
-            "kind": "file",
-            "path": "README.md",
-            "lineStart": 10,
-            "lineEnd": 14
           }
         }
       ],
@@ -121,8 +98,8 @@
           "quote": "npm test",
           "location": {
             "sourceId": "readme_266147490538",
-            "startOffset": 2783,
-            "endOffset": 2791,
+            "startOffset": 2806,
+            "endOffset": 2814,
             "kind": "file",
             "path": "README.md",
             "lineStart": 47,
@@ -144,8 +121,20 @@
           "quote": "manifest.json",
           "location": {
             "sourceId": "readme_8f6b06164083",
-            "startOffset": 2167,
-            "endOffset": 2180,
+            "startOffset": 566,
+            "endOffset": 579,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 10,
+            "lineEnd": 14
+          }
+        },
+        {
+          "quote": "manifest.json",
+          "location": {
+            "sourceId": "readme_8f6b06164083",
+            "startOffset": 2190,
+            "endOffset": 2203,
             "kind": "file",
             "path": "README.md",
             "lineStart": 37,
@@ -167,8 +156,8 @@
           "quote": "CONTRIBUTING.md",
           "location": {
             "sourceId": "readme_8f6b06164083",
-            "startOffset": 2972,
-            "endOffset": 2987,
+            "startOffset": 2995,
+            "endOffset": 3010,
             "kind": "file",
             "path": "README.md",
             "lineStart": 49,
@@ -179,8 +168,8 @@
           "quote": "CONTRIBUTING.md",
           "location": {
             "sourceId": "readme_8f6b06164083",
-            "startOffset": 2989,
-            "endOffset": 3004,
+            "startOffset": 3012,
+            "endOffset": 3027,
             "kind": "file",
             "path": "README.md",
             "lineStart": 49,
@@ -237,8 +226,8 @@
           "quote": "PRIVACY.md",
           "location": {
             "sourceId": "readme_266147490538",
-            "startOffset": 1862,
-            "endOffset": 1872,
+            "startOffset": 1885,
+            "endOffset": 1895,
             "kind": "file",
             "path": "README.md",
             "lineStart": 33,
@@ -274,29 +263,6 @@
     {
       "kind": "file_exists",
       "params": {
-        "path": "canvas_extension_zip"
-      },
-      "id": "c_b94edf98c3",
-      "sourceId": "readme_8f6b06164083",
-      "occurrences": [
-        {
-          "quote": "canvas_extension_zip",
-          "location": {
-            "sourceId": "readme_8f6b06164083",
-            "startOffset": 537,
-            "endOffset": 557,
-            "kind": "file",
-            "path": "README.md",
-            "lineStart": 10,
-            "lineEnd": 14
-          }
-        }
-      ],
-      "tier": "static"
-    },
-    {
-      "kind": "file_exists",
-      "params": {
         "path": "CONTRIBUTING.md"
       },
       "id": "c_bdf0298482",
@@ -306,8 +272,8 @@
           "quote": "CONTRIBUTING.md",
           "location": {
             "sourceId": "readme_266147490538",
-            "startOffset": 2972,
-            "endOffset": 2987,
+            "startOffset": 2995,
+            "endOffset": 3010,
             "kind": "file",
             "path": "README.md",
             "lineStart": 49,
@@ -318,8 +284,8 @@
           "quote": "CONTRIBUTING.md",
           "location": {
             "sourceId": "readme_266147490538",
-            "startOffset": 2989,
-            "endOffset": 3004,
+            "startOffset": 3012,
+            "endOffset": 3027,
             "kind": "file",
             "path": "README.md",
             "lineStart": 49,
@@ -364,8 +330,20 @@
           "quote": "manifest.json",
           "location": {
             "sourceId": "readme_266147490538",
-            "startOffset": 2167,
-            "endOffset": 2180,
+            "startOffset": 566,
+            "endOffset": 579,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 10,
+            "lineEnd": 14
+          }
+        },
+        {
+          "quote": "manifest.json",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 2190,
+            "endOffset": 2203,
             "kind": "file",
             "path": "README.md",
             "lineStart": 37,
