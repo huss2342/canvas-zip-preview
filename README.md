@@ -1,4 +1,5 @@
 # Canvas ZIP Preview
+<img width="1727" height="900" alt="image" src="https://github.com/user-attachments/assets/e13f2791-cd4b-4556-b545-951a451394e8" />
 
 A small, build-free Chrome extension that adds a **Preview ZIP** button beside ZIP submissions in Canvas SpeedGrader.
 
@@ -9,7 +10,7 @@ A small, build-free Chrome extension that adds a **Preview ZIP** button beside Z
 1. Open `chrome://extensions` in Chrome.
 2. Turn on **Developer mode** in the top-right corner.
 3. Click **Load unpacked**.
-4. Select this folder: `canvas_extension_zip`.
+4. Select the repository folder (the one containing `manifest.json`).
 5. Reload an open Canvas SpeedGrader tab once.
 
 When a student submitted a `.zip`, click the orange **Preview ZIP** button beside the attachment. The preview stays inside SpeedGrader.
