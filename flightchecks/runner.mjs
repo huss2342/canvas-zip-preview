@@ -2090,7 +2090,7 @@ async function runCliFlag(flag, snapshot, cwd) {
     };
   let found = false;
   for (const path of listed.value) {
-    if (!/\.(?:js|jsx|ts|tsx)$/u.test(path) || /(^|\/)(?:node_modules|dist|build)(\/|$)/u.test(path))
+    if (!/\.(?:js|jsx|ts|tsx|py)$/u.test(path) || /(^|\/)(?:node_modules|dist|build)(\/|$)/u.test(path))
       continue;
     const read = snapshot.readText(path);
     if (read.ok && read.value !== null && quotedFlag(read.value, flag))

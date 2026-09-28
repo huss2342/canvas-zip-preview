@@ -1,7 +1,7 @@
 {
   "repo": "huss2342/canvas-zip-preview",
   "sourceHashes": {
-    "readme_266147490538": "dd8c50f1793d8d33039d2e83afcc757a6bb451dc96414fcbd655b9459bf69184"
+    "readme_266147490538": "796e25376b60d2464c4b051374e41a75bd2fe65f1a0951da3bbc3475bf49a037"
   },
   "claims": [
     {
@@ -39,12 +39,47 @@
           "quote": "npm test",
           "location": {
             "sourceId": "readme_266147490538",
-            "startOffset": 2806,
-            "endOffset": 2814,
+            "startOffset": 2915,
+            "endOffset": 2923,
             "kind": "file",
             "path": "README.md",
             "lineStart": 47,
             "lineEnd": 47
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "file_exists",
+      "params": {
+        "path": "PUBLISHING.md"
+      },
+      "id": "c_55ead1bc93",
+      "sourceId": "readme_266147490538",
+      "occurrences": [
+        {
+          "quote": "PUBLISHING.md",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 3218,
+            "endOffset": 3231,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 49,
+            "lineEnd": 49
+          }
+        },
+        {
+          "quote": "PUBLISHING.md",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 3233,
+            "endOffset": 3246,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 49,
+            "lineEnd": 49
           }
         }
       ],
@@ -74,12 +109,35 @@
           "quote": "PRIVACY.md",
           "location": {
             "sourceId": "readme_266147490538",
-            "startOffset": 1885,
-            "endOffset": 1895,
+            "startOffset": 1994,
+            "endOffset": 2004,
             "kind": "file",
             "path": "README.md",
             "lineStart": 33,
             "lineEnd": 33
+          }
+        }
+      ],
+      "tier": "static"
+    },
+    {
+      "kind": "script_exists",
+      "params": {
+        "script": "build:release"
+      },
+      "id": "c_a5bf9af71d",
+      "sourceId": "readme_266147490538",
+      "occurrences": [
+        {
+          "quote": "npm run build:release",
+          "location": {
+            "sourceId": "readme_266147490538",
+            "startOffset": 3064,
+            "endOffset": 3085,
+            "kind": "file",
+            "path": "README.md",
+            "lineStart": 49,
+            "lineEnd": 49
           }
         }
       ],
@@ -120,24 +178,24 @@
           "quote": "CONTRIBUTING.md",
           "location": {
             "sourceId": "readme_266147490538",
-            "startOffset": 2995,
-            "endOffset": 3010,
+            "startOffset": 3340,
+            "endOffset": 3355,
             "kind": "file",
             "path": "README.md",
-            "lineStart": 49,
-            "lineEnd": 49
+            "lineStart": 51,
+            "lineEnd": 51
           }
         },
         {
           "quote": "CONTRIBUTING.md",
           "location": {
             "sourceId": "readme_266147490538",
-            "startOffset": 3012,
-            "endOffset": 3027,
+            "startOffset": 3357,
+            "endOffset": 3372,
             "kind": "file",
             "path": "README.md",
-            "lineStart": 49,
-            "lineEnd": 49
+            "lineStart": 51,
+            "lineEnd": 51
           }
         }
       ],
@@ -167,8 +225,8 @@
           "quote": "manifest.json",
           "location": {
             "sourceId": "readme_266147490538",
-            "startOffset": 2190,
-            "endOffset": 2203,
+            "startOffset": 2299,
+            "endOffset": 2312,
             "kind": "file",
             "path": "README.md",
             "lineStart": 37,
