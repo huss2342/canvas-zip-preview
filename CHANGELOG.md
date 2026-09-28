@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 — 2026-09-28
+
+- Added Chrome Web Store icons and prepared a reproducible release package.
+- Added custom preview window sizing with mouse and keyboard controls.
+- Improved image zoom and panning for large diagrams.
+
 ## 1.1.1 — 2026-09-21
 
 - Remember the selected Normal, Large, or Full-screen window size across ZIP previews and browser sessions.

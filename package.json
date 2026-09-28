@@ -1,9 +1,10 @@
 {
   "name": "canvas-zip-preview",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": true,
   "description": "Build-free Chrome extension for previewing ZIP submissions in Canvas SpeedGrader",
   "scripts": {
-    "test": "node tests/zip-reader.test.js"
+    "test": "node tests/zip-reader.test.js",
+    "build:release": "python tools/build_release.py"
   }
 }

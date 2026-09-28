@@ -19,3 +19,5 @@ jobs:
       - run: node --check background.js
       - run: node --check content.js
       - run: node --check zip-reader.js
+      - run: node --check store/demo.js
+      - run: npm run build:release

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Canvas ZIP Preview — synthetic store demo</title>
+  <link rel="stylesheet" href="../content.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { background: #f5f6f8; color: #27313d; font: 14px/1.45 system-ui, sans-serif; margin: 0; }
+    .demo-banner { background: #fff4e9; border-bottom: 1px solid #efc9ac; color: #723b13; font-size: 12px; font-weight: 700; padding: 7px 20px; text-align: center; }
+    .app-header { align-items: center; background: #fff; border-bottom: 1px solid #dce0e5; display: flex; gap: 25px; height: 55px; padding: 0 22px; }
+    .app-mark { background: #b73524; border-radius: 50%; height: 28px; width: 28px; }
+    .app-header strong { font-size: 17px; }
+    .app-header span { color: #596579; }
+    .crumb { color: #57677a; font-size: 12px; padding: 17px 30px 10px; }
+    .crumb b { color: #343d49; }
+    h1 { font-size: 22px; font-weight: 650; margin: 0 30px 17px; }
+    .layout { display: grid; gap: 14px; grid-template-columns: 1fr 306px; padding: 0 25px 25px; }
+    .submission, .grading { background: white; border: 1px solid #dfe3e8; border-radius: 7px; min-height: 650px; }
+    .submission-head { align-items: center; border-bottom: 1px solid #e3e6ea; display: flex; justify-content: space-between; padding: 16px 20px; }
+    .submission-head strong { font-size: 16px; }
+    .pill { background: #edf8f0; border-radius: 12px; color: #34734d; font-size: 11px; font-weight: 700; padding: 4px 9px; }
+    .attachments { list-style: none; margin: 17px 20px; padding: 0; }
+    .attachments li { align-items: center; border: 1px solid #dfe3e8; border-radius: 6px; display: flex; gap: 10px; padding: 12px; }
+    .attachments li > span { color: #718095; font-size: 19px; }
+    .attachments a { color: #246ca7; margin-left: auto; text-decoration: none; }
+    .grading { padding: 18px; }
+    .grading h2 { font-size: 17px; margin: 0 0 20px; }
+    .grading label { color: #5f6877; display: block; font-size: 12px; font-weight: 700; margin: 17px 0 8px; }
+    .grading .box { border: 1px solid #dce2e8; border-radius: 5px; height: 38px; }
+    .grading .comment { height: 125px; }
+    .muted { color: #7c8694; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">SYNTHETIC DEMO · no real student data or school records</div>
+  <div class="app-header"><div class="app-mark"></div><strong>Course workspace</strong><span>Assignments</span><span>Grades</span></div>
+  <div class="crumb">Demo Programming Course / <b>Assignment 2 / SpeedGrader</b></div>
+  <h1>Assignment 2: Data Parser</h1>
+  <div class="layout">
+    <section class="submission">
+      <div class="submission-head"><strong>Example submission</strong><span class="pill">Submitted</span></div>
+      <ul class="attachments" data-testid="submission-attachments">
+        <li><span aria-hidden="true">▣</span><button id="submission-attachment-link-1" type="button">data-parser.zip</button><a href="https://example.instructure.com/files/42/download">Download</a></li>
+      </ul>
+    </section>
+    <aside class="grading">
+      <h2>Grade</h2>
+      <label>Score</label><div class="box"></div>
+      <label>Rubric</label><div class="box"></div>
+      <label>Comment</label><div class="box comment"></div>
+      <p class="muted">This background is an illustrative, synthetic course page.</p>
+    </aside>
+  </div>
+  <script src="../zip-reader.js"></script>
+  <script src="demo.js"></script>
+  <script src="../content.js"></script>
+</body>
+</html>

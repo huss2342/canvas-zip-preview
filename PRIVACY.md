@@ -1,6 +1,6 @@
 # Privacy Policy
 
-Last updated: September 21, 2026
+Last updated: September 28, 2026
 
 Canvas ZIP Preview has one purpose: letting an authorized Canvas user inspect a ZIP submission inside SpeedGrader.
 
@@ -23,6 +23,8 @@ The extension:
 ## Storage and retention
 
 Archive data is held in the current browser tab's memory while the preview is open. The extension does not write submission contents to extension storage, local storage, IndexedDB, or a user-selected file. Closing the preview or navigating away releases the extension's references so the browser can reclaim that memory. The browser, operating system, Canvas, or its storage provider may independently apply their own normal caching and logging behavior.
+
+The extension saves only the user's preferred preview window size and, for a custom size, its width and height in Chrome extension storage. These settings contain no submission contents.
 
 ## Permissions
 

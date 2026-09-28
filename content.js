@@ -6,7 +6,9 @@
   const MAX_TEXT_PREVIEW = 2 * 1024 * 1024;
   const MAX_IMAGE_PREVIEW = 12 * 1024 * 1024;
   const WINDOW_SIZE_KEY = "preferredPreviewWindowSize";
-  const WINDOW_SIZES = new Set(["normal", "large", "full"]);
+  const WINDOW_DIMENSIONS_KEY = "preferredPreviewWindowDimensions";
+  const WINDOW_SIZES = new Set(["normal", "large", "full", "custom"]);
+  const ZOOM_STEPS = [0.05, 0.1, 0.125, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
   const TEXT_EXTENSIONS = new Set([
     "txt", "md", "markdown", "csv", "tsv", "json", "jsonl", "xml", "yaml", "yml", "toml", "ini", "cfg", "conf",
     "html", "htm", "css", "scss", "sass", "less", "js", "jsx", "mjs", "cjs", "ts", "tsx", "vue", "svelte",
@@ -22,6 +24,11 @@
   let activePanel = null;
   let activeAttachment = null;
   let activeObjectUrl = null;
+  let activeDownloadController = null;
+  let activeImageCleanup = null;
+  let activeTrigger = null;
+  let previewGeneration = 0;
+  let panelGeneration = 0;
   let scanQueued = false;
 
   const observer = new MutationObserver(() => {
@@ -54,7 +61,7 @@
       button.className = "czp-preview-button";
       button.innerHTML = `${zipIcon()}<span>Preview ZIP</span>`;
       button.title = `Inspect files inside ${fileName}`;
-      button.addEventListener("click", () => openArchive(download.href, fileName, item));
+      button.addEventListener("click", () => openArchive(download.href, fileName, item, button));
 
       const actionHost = download.parentElement || item;
       actionHost.insertBefore(button, download);
@@ -72,22 +79,27 @@
     }
   }
 
-  async function openArchive(url, fileName, attachment) {
-    closePanel();
+  async function openArchive(url, fileName, attachment, trigger) {
+    closePanel(false);
+    const generation = panelGeneration;
     activeAttachment = attachment;
-    const preferredWindowSize = await getPreferredWindowSize();
-    if (!attachment.isConnected) return;
-    const panel = createPanel(fileName, preferredWindowSize);
+    activeTrigger = trigger;
+    const windowPreference = await getWindowPreference();
+    if (generation !== panelGeneration || !attachment.isConnected) return;
+    const panel = createPanel(fileName, windowPreference);
     activePanel = panel;
     document.body.append(panel);
+    if (panel.dataset.size === "custom") applyPanelDimensions(panel, windowPreference.dimensions);
     panel.querySelector(".czp-close").focus();
+    const controller = new AbortController();
+    activeDownloadController = controller;
 
     try {
       setLoading(panel, "Downloading securely from Canvas…", 0);
       const buffer = await downloadArchive(url, (loaded, total) => {
         const percent = total ? Math.min(100, Math.round((loaded / total) * 100)) : 0;
         setLoading(panel, total ? `Downloading ${formatBytes(loaded)} of ${formatBytes(total)}…` : `Downloading ${formatBytes(loaded)}…`, percent);
-      });
+      }, controller.signal);
       if (buffer.byteLength > MAX_ARCHIVE_BYTES) {
         throw new Error(`This archive is ${formatBytes(buffer.byteLength)}. The in-browser limit is ${formatBytes(MAX_ARCHIVE_BYTES)}.`);
       }
@@ -96,17 +108,20 @@
       renderArchive(panel, archive, fileName, buffer.byteLength);
     } catch (error) {
       renderError(panel, error?.message || "The ZIP could not be opened.");
+    } finally {
+      if (activeDownloadController === controller) activeDownloadController = null;
     }
   }
 
-  async function downloadArchive(url, onProgress) {
+  async function downloadArchive(url, onProgress, signal) {
     try {
-      const response = await fetch(url, { credentials: "include", redirect: "follow" });
+      const response = await fetch(url, { credentials: "include", redirect: "follow", signal });
       if (!response.ok) throw new Error(`Canvas returned HTTP ${response.status}.`);
       return await readResponse(response, onProgress);
     } catch (pageFetchError) {
+      if (signal.aborted) throw pageFetchError;
       try {
-        return await backgroundFetch(url, onProgress);
+        return await backgroundFetch(url, onProgress, signal);
       } catch (backgroundError) {
         throw new Error(`${backgroundError.message || pageFetchError.message} If Canvas opened the file in another tab, reload SpeedGrader and try again.`);
       }
@@ -134,19 +149,23 @@
     return joinChunks(chunks, loaded).buffer;
   }
 
-  function backgroundFetch(url, onProgress) {
+  function backgroundFetch(url, onProgress, signal) {
     return new Promise((resolve, reject) => {
       const port = chrome.runtime.connect({ name: "canvas-zip-fetch" });
       const chunks = [];
       let total = 0;
       let expected = 0;
       let settled = false;
+      const onAbort = () => fail("Download cancelled.");
       const fail = (message) => {
         if (settled) return;
         settled = true;
+        signal.removeEventListener("abort", onAbort);
         port.disconnect();
         reject(new Error(message));
       };
+      signal.addEventListener("abort", onAbort, { once: true });
+      if (signal.aborted) { onAbort(); return; }
       port.onDisconnect.addListener(() => {
         if (!settled) fail(chrome.runtime.lastError?.message || "The background download stopped.");
       });
@@ -162,6 +181,7 @@
           else onProgress(total, expected);
         } else if (message.type === "done") {
           settled = true;
+          signal.removeEventListener("abort", onAbort);
           port.disconnect();
           resolve(joinChunks(chunks, total).buffer);
         } else if (message.type === "error") {
@@ -172,10 +192,10 @@
     });
   }
 
-  function createPanel(fileName, preferredWindowSize = "normal") {
+  function createPanel(fileName, windowPreference) {
     const panel = document.createElement("section");
     panel.className = "czp-panel";
-    panel.dataset.size = WINDOW_SIZES.has(preferredWindowSize) ? preferredWindowSize : "normal";
+    panel.dataset.size = windowPreference.size;
     panel.setAttribute("role", "dialog");
     panel.setAttribute("aria-modal", "false");
     panel.setAttribute("aria-label", `ZIP preview: ${fileName}`);
@@ -192,6 +212,7 @@
               <option value="normal"${panel.dataset.size === "normal" ? " selected" : ""}>Normal</option>
               <option value="large"${panel.dataset.size === "large" ? " selected" : ""}>Large</option>
               <option value="full"${panel.dataset.size === "full" ? " selected" : ""}>Full screen</option>
+              <option value="custom"${panel.dataset.size === "custom" ? " selected" : ""}>Custom</option>
             </select>
           </label>
           <button class="czp-close" type="button" aria-label="Close ZIP preview">${closeIcon()}</button>
@@ -203,28 +224,101 @@
           <div class="czp-loading-message">Preparing preview…</div>
           <div class="czp-progress"><i></i></div>
         </div>
-      </div>`;
+      </div>
+      <button class="czp-resize-handle" type="button" aria-label="Resize preview window. Drag or use arrow keys." title="Drag to resize · Arrow keys also work"></button>`;
     panel.querySelector(".czp-close").addEventListener("click", closePanel);
-    panel.querySelector(".czp-window-size select").addEventListener("change", (event) => {
+    const sizeSelect = panel.querySelector(".czp-window-size select");
+    const resizeHandle = panel.querySelector(".czp-resize-handle");
+    let customDimensions = windowPreference.dimensions;
+    const savePreference = () => {
+      chrome.storage.local.set({
+        [WINDOW_SIZE_KEY]: panel.dataset.size,
+        [WINDOW_DIMENSIONS_KEY]: customDimensions
+      }).catch(() => {
+        // The current window remains usable if extension storage is unavailable.
+      });
+    };
+    const setCustomSize = (dimensions, persist = false) => {
+      panel.dataset.size = "custom";
+      sizeSelect.value = "custom";
+      customDimensions = applyPanelDimensions(panel, dimensions);
+      if (persist) savePreference();
+    };
+    sizeSelect.addEventListener("change", (event) => {
+      if (event.currentTarget.value === "custom") {
+        const rect = panel.getBoundingClientRect();
+        setCustomSize(customDimensions || { width: rect.width, height: rect.height }, true);
+        return;
+      }
       panel.style.removeProperty("width");
       panel.style.removeProperty("height");
       panel.dataset.size = event.currentTarget.value;
-      chrome.storage.local.set({ [WINDOW_SIZE_KEY]: event.currentTarget.value }).catch(() => {
-        // The size still applies to this window if extension storage is unavailable.
+      savePreference();
+    });
+    let dragStart = null;
+    resizeHandle.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      resizeHandle.focus();
+      const rect = panel.getBoundingClientRect();
+      dragStart = { x: event.clientX, y: event.clientY, width: rect.width, height: rect.height };
+      resizeHandle.setPointerCapture(event.pointerId);
+    });
+    resizeHandle.addEventListener("pointermove", (event) => {
+      if (!dragStart) return;
+      setCustomSize({
+        width: dragStart.width + event.clientX - dragStart.x,
+        height: dragStart.height + event.clientY - dragStart.y
       });
     });
+    const endResize = () => {
+      if (!dragStart) return;
+      dragStart = null;
+      savePreference();
+    };
+    resizeHandle.addEventListener("pointerup", endResize);
+    resizeHandle.addEventListener("pointercancel", endResize);
+    resizeHandle.addEventListener("keydown", (event) => {
+      const delta = { ArrowRight: [24, 0], ArrowLeft: [-24, 0], ArrowDown: [0, 24], ArrowUp: [0, -24] }[event.key];
+      if (!delta) return;
+      event.preventDefault();
+      const rect = panel.getBoundingClientRect();
+      setCustomSize({ width: rect.width + delta[0], height: rect.height + delta[1] }, true);
+    });
+    const handleViewportResize = () => {
+      if (panel.dataset.size === "custom") applyPanelDimensions(panel, customDimensions);
+    };
+    window.addEventListener("resize", handleViewportResize);
+    panel._cleanup = () => window.removeEventListener("resize", handleViewportResize);
     panel.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closePanel();
     });
     return panel;
   }
 
-  async function getPreferredWindowSize() {
+  function applyPanelDimensions(panel, dimensions) {
+    const rect = panel.getBoundingClientRect();
+    const maxWidth = Math.max(1, window.innerWidth - rect.left - (window.innerWidth <= 900 ? 12 : 20));
+    const maxHeight = Math.max(1, window.innerHeight - rect.top - 12);
+    const minWidth = Math.min(window.innerWidth <= 900 ? 340 : 600, maxWidth);
+    const minHeight = Math.min(window.innerWidth <= 900 ? 340 : 420, maxHeight);
+    const width = Math.round(Math.min(maxWidth, Math.max(minWidth, dimensions?.width || rect.width)));
+    const height = Math.round(Math.min(maxHeight, Math.max(minHeight, dimensions?.height || rect.height)));
+    panel.style.width = `${width}px`;
+    panel.style.height = `${height}px`;
+    return { width, height };
+  }
+
+  async function getWindowPreference() {
     try {
-      const stored = await chrome.storage.local.get(WINDOW_SIZE_KEY);
-      return WINDOW_SIZES.has(stored[WINDOW_SIZE_KEY]) ? stored[WINDOW_SIZE_KEY] : "normal";
+      const stored = await chrome.storage.local.get([WINDOW_SIZE_KEY, WINDOW_DIMENSIONS_KEY]);
+      const saved = stored[WINDOW_DIMENSIONS_KEY];
+      return {
+        size: WINDOW_SIZES.has(stored[WINDOW_SIZE_KEY]) ? stored[WINDOW_SIZE_KEY] : "normal",
+        dimensions: Number.isFinite(saved?.width) && Number.isFinite(saved?.height) ? saved : null
+      };
     } catch {
-      return "normal";
+      return { size: "normal", dimensions: null };
     }
   }
 
@@ -256,12 +350,12 @@
       </div>
       <div class="czp-toolbar">
         <label class="czp-search">${searchIcon()}<span class="czp-sr-only">Filter files</span><input type="search" placeholder="Filter filenames…" autocomplete="off"></label>
-        <button type="button" class="czp-copy">${copyIcon()}<span>Copy file list</span></button>
+        <button type="button" class="czp-copy" title="Copy file list">${copyIcon()}<span aria-live="polite">Copy file list</span></button>
       </div>
       <div class="czp-notices" aria-live="polite"></div>
       <div class="czp-workspace">
         <div class="czp-list-pane">
-          <div class="czp-list-heading"><span>Archive contents</span><span>${files.length + directories.length} entries</span></div>
+          <div class="czp-list-heading"><span>Archive contents</span><span aria-live="polite">${files.length + directories.length} entries</span></div>
           <div class="czp-file-list" role="listbox" aria-label="Files in ${escapeHtml(fileName)}"></div>
           <div class="czp-empty" hidden>No filenames match that filter.</div>
         </div>
@@ -283,6 +377,17 @@
 
     const list = body.querySelector(".czp-file-list");
     renderEntryList(list, archive.entries, archive, panel);
+    list.addEventListener("keydown", (event) => {
+      if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+      const visible = Array.from(list.children).filter((row) => !row.hidden);
+      if (!visible.length) return;
+      event.preventDefault();
+      const index = visible.indexOf(event.target);
+      const next = event.key === "Home" ? 0 : event.key === "End" ? visible.length - 1
+        : event.key === "ArrowDown" ? Math.min(visible.length - 1, index + 1) : Math.max(0, index - 1);
+      visible[next].focus();
+      visible[next].click();
+    });
 
     const search = body.querySelector(".czp-search input");
     search.addEventListener("input", () => {
@@ -294,6 +399,11 @@
         if (visible) shown += 1;
       }
       body.querySelector(".czp-empty").hidden = shown !== 0;
+      body.querySelector(".czp-list-heading span:last-child").textContent = query ? `${shown} of ${archive.entries.length} entries` : `${archive.entries.length} entries`;
+      if (list.querySelector('[tabindex="0"]:not([hidden])') === null) {
+        list.querySelector('[tabindex="0"]')?.setAttribute("tabindex", "-1");
+        Array.from(list.children).find((row) => !row.hidden)?.setAttribute("tabindex", "0");
+      }
     });
 
     const copyButton = body.querySelector(".czp-copy");
@@ -302,20 +412,33 @@
       try {
         await navigator.clipboard.writeText(text);
         copyButton.querySelector("span").textContent = "Copied!";
-        setTimeout(() => { if (copyButton.isConnected) copyButton.querySelector("span").textContent = "Copy file list"; }, 1500);
+        copyButton.title = "Copied!";
+        setTimeout(() => {
+          if (!copyButton.isConnected) return;
+          copyButton.querySelector("span").textContent = "Copy file list";
+          copyButton.title = "Copy file list";
+        }, 1500);
       } catch {
         copyButton.querySelector("span").textContent = "Copy failed";
+        copyButton.title = "Copy failed";
+        setTimeout(() => {
+          if (!copyButton.isConnected) return;
+          copyButton.querySelector("span").textContent = "Copy file list";
+          copyButton.title = "Copy file list";
+        }, 2000);
       }
     });
   }
 
   function renderEntryList(list, entries, archive, panel) {
     const fragment = document.createDocumentFragment();
-    entries.forEach((entry) => {
+    entries.forEach((entry, index) => {
       const row = document.createElement("button");
       row.type = "button";
       row.className = `czp-file-row${entry.isDirectory ? " is-directory" : ""}${entry.pathSafety.safe ? "" : " is-unsafe"}`;
       row.setAttribute("role", "option");
+      row.setAttribute("aria-selected", "false");
+      row.tabIndex = index === 0 ? 0 : -1;
       row.dataset.name = entry.name.toLocaleLowerCase();
       row.style.setProperty("--depth", Math.min(entry.depth, 8));
       row.innerHTML = `
@@ -324,6 +447,8 @@
         <span class="czp-file-size">${entry.isDirectory ? "folder" : formatBytes(entry.uncompressedSize)}</span>`;
       row.addEventListener("click", () => {
         list.querySelector('[aria-selected="true"]')?.setAttribute("aria-selected", "false");
+        list.querySelector('[tabindex="0"]')?.setAttribute("tabindex", "-1");
+        row.tabIndex = 0;
         row.setAttribute("aria-selected", "true");
         showEntry(panel, archive, entry);
       });
@@ -333,6 +458,9 @@
   }
 
   async function showEntry(panel, archive, entry) {
+    const generation = ++previewGeneration;
+    activeImageCleanup?.();
+    activeImageCleanup = null;
     if (activeObjectUrl) {
       URL.revokeObjectURL(activeObjectUrl);
       activeObjectUrl = null;
@@ -359,80 +487,106 @@
       const extension = getExtension(entry.name);
       if (IMAGE_TYPES.has(extension)) {
         const bytes = await archive.extract(entry, MAX_IMAGE_PREVIEW);
-        if (panel !== activePanel) return;
+        if (panel !== activePanel || generation !== previewGeneration) return;
         const blob = new Blob([bytes], { type: IMAGE_TYPES.get(extension) });
         activeObjectUrl = URL.createObjectURL(blob);
         preview.innerHTML = `
           <div class="czp-image-tools">
             <span class="czp-image-dimensions">Loading image…</span>
             <div class="czp-zoom-controls" role="group" aria-label="Image zoom controls">
-              <button type="button" data-zoom="out" aria-label="Zoom out">${minusIcon()}</button>
+              <button type="button" data-zoom="out" aria-label="Zoom out" disabled>${minusIcon()}</button>
               <button type="button" data-zoom="fit" class="is-active">Fit</button>
-              <button type="button" data-zoom="in" aria-label="Zoom in">${plusIcon()}</button>
+              <button type="button" data-zoom="in" aria-label="Zoom in" disabled>${plusIcon()}</button>
             </div>
           </div>
-          <div class="czp-image-viewport"><img alt="Preview of ${escapeHtml(entry.basename)}"></div>
+          <div class="czp-image-viewport"><div class="czp-image-stage"><img alt="Preview of ${escapeHtml(entry.basename)}" title="Double-click to toggle Fit and actual size"></div></div>
           <div class="czp-image-caption"><span>${escapeHtml(entry.basename)} · ${formatBytes(bytes.length)}</span><span class="czp-zoom-label">Fit to window</span></div>`;
         const image = preview.querySelector("img");
         const viewport = preview.querySelector(".czp-image-viewport");
         const fitButton = preview.querySelector('[data-zoom="fit"]');
+        const outButton = preview.querySelector('[data-zoom="out"]');
+        const inButton = preview.querySelector('[data-zoom="in"]');
         const zoomLabel = preview.querySelector(".czp-zoom-label");
         let fitImage = true;
         let zoom = 1;
-
+        const fitScale = () => Math.min(
+          1,
+          Math.max(1, viewport.clientWidth - 16) / image.naturalWidth,
+          Math.max(1, viewport.clientHeight - 16) / image.naturalHeight
+        );
         const applyImageZoom = () => {
           fitButton.classList.toggle("is-active", fitImage);
-          if (fitImage) {
-            image.style.removeProperty("width");
-            image.style.removeProperty("max-width");
-            image.style.removeProperty("max-height");
-            zoomLabel.textContent = "Fit to window";
-          } else {
-            image.style.width = `${Math.max(1, Math.round(image.naturalWidth * zoom))}px`;
-            image.style.maxWidth = "none";
-            image.style.maxHeight = "none";
-            zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
-          }
+          if (!image.naturalWidth || !image.naturalHeight) return;
+          const scale = fitImage ? fitScale() : zoom;
+          image.style.width = `${Math.max(1, Math.round(image.naturalWidth * scale))}px`;
+          const percent = scale < 0.1 ? (scale * 100).toFixed(1) : Math.round(scale * 100);
+          zoomLabel.textContent = fitImage ? `Fit · ${percent}%` : `${percent}%`;
+          outButton.disabled = scale <= 0.0101;
+          inButton.disabled = scale >= 4;
         };
-        preview.querySelector('[data-zoom="out"]').addEventListener("click", () => {
-          if (fitImage) { fitImage = false; zoom = 0.75; }
-          else zoom = Math.max(0.25, zoom - 0.25);
-          applyImageZoom();
+        const centerImage = () => requestAnimationFrame(() => {
+          if (generation !== previewGeneration) return;
+          viewport.scrollTo({
+            left: Math.max(0, (viewport.scrollWidth - viewport.clientWidth) / 2),
+            top: Math.max(0, (viewport.scrollHeight - viewport.clientHeight) / 2)
+          });
         });
+        const stepZoom = (direction) => {
+          if (!image.naturalWidth) return;
+          const current = fitImage ? fitScale() : zoom;
+          if (current < ZOOM_STEPS[0]) {
+            zoom = Math.max(0.01, Math.min(ZOOM_STEPS[0], current * (direction > 0 ? 1.5 : 1 / 1.5)));
+          } else if (direction > 0) {
+            zoom = ZOOM_STEPS.find((step) => step > current + 0.001) || ZOOM_STEPS.at(-1);
+          } else {
+            zoom = ZOOM_STEPS.findLast((step) => step < current - 0.001) || Math.max(0.01, current / 1.5);
+          }
+          fitImage = false;
+          applyImageZoom();
+          centerImage();
+        };
+        outButton.addEventListener("click", () => stepZoom(-1));
         fitButton.addEventListener("click", () => {
           fitImage = true;
           applyImageZoom();
+          centerImage();
         });
-        preview.querySelector('[data-zoom="in"]').addEventListener("click", () => {
-          if (fitImage) { fitImage = false; zoom = 1; }
-          else zoom = Math.min(4, zoom + 0.25);
-          applyImageZoom();
-        });
+        inButton.addEventListener("click", () => stepZoom(1));
         image.addEventListener("load", () => {
+          if (panel !== activePanel || generation !== previewGeneration) return;
           preview.querySelector(".czp-image-dimensions").textContent = `${image.naturalWidth.toLocaleString()} × ${image.naturalHeight.toLocaleString()} px`;
           applyImageZoom();
+          const observer = new ResizeObserver(() => {
+            if (fitImage) applyImageZoom();
+          });
+          observer.observe(viewport);
+          activeImageCleanup = () => observer.disconnect();
+        }, { once: true });
+        image.addEventListener("error", () => {
+          if (panel !== activePanel || generation !== previewGeneration) return;
+          preview.innerHTML = `<div class="czp-preview-error">${warningIcon()}<strong>Preview unavailable</strong><span>The browser could not display this image.</span></div>`;
         }, { once: true });
         image.addEventListener("dblclick", () => {
+          if (fitImage) zoom = fitScale() >= 0.95 ? 2 : 1;
           fitImage = !fitImage;
-          zoom = 1;
           applyImageZoom();
-          if (!fitImage) viewport.scrollTo({ left: 0, top: 0 });
+          centerImage();
         });
         image.src = activeObjectUrl;
       } else if (isTextFile(entry.name)) {
         const bytes = await archive.extract(entry, MAX_TEXT_PREVIEW);
-        if (panel !== activePanel) return;
+        if (panel !== activePanel || generation !== previewGeneration) return;
         const decoded = decodeText(bytes);
         preview.innerHTML = `<div class="czp-code-toolbar"><span>${escapeHtml(decoded.encoding)}</span><span>${decoded.lines.toLocaleString()} lines</span></div><pre class="czp-text-preview"></pre>`;
         preview.querySelector("pre").textContent = decoded.text;
       } else {
         const bytes = await archive.extract(entry, Math.min(MAX_TEXT_PREVIEW, Math.max(entry.uncompressedSize, 1)));
-        if (panel !== activePanel) return;
+        if (panel !== activePanel || generation !== previewGeneration) return;
         preview.innerHTML = `<div class="czp-binary-intro"><strong>Binary preview</strong><span>First ${Math.min(bytes.length, 1024).toLocaleString()} bytes shown as hex and text.</span></div><pre class="czp-hex-preview"></pre>`;
         preview.querySelector("pre").textContent = hexDump(bytes.subarray(0, 1024));
       }
     } catch (error) {
-      if (panel !== activePanel) return;
+      if (panel !== activePanel || generation !== previewGeneration) return;
       preview.innerHTML = `<div class="czp-preview-error">${warningIcon()}<strong>Preview unavailable</strong><span>${escapeHtml(error?.message || "This file cannot be previewed.")}</span></div>`;
     }
   }
@@ -447,12 +601,21 @@
     panel.querySelector(".czp-fatal button").addEventListener("click", closePanel);
   }
 
-  function closePanel() {
+  function closePanel(restoreFocus = true) {
+    panelGeneration += 1;
+    previewGeneration += 1;
+    activeDownloadController?.abort();
+    activeDownloadController = null;
+    activeImageCleanup?.();
+    activeImageCleanup = null;
     if (activeObjectUrl) URL.revokeObjectURL(activeObjectUrl);
     activeObjectUrl = null;
+    activePanel?._cleanup?.();
     activePanel?.remove();
     activePanel = null;
     activeAttachment = null;
+    if (restoreFocus && activeTrigger?.isConnected) activeTrigger.focus();
+    activeTrigger = null;
   }
 
   function joinChunks(chunks, length) {

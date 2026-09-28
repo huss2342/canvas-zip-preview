@@ -20,8 +20,8 @@ When a student submitted a `.zip`, click the orange **Preview ZIP** button besid
 - Compressed and expanded sizes, modified times, compression method, and CRC-32
 - Search/filter and a one-click copyable file list
 - In-page previews for text, source code, common images, and a hex view for other files
-- Normal, large, and full-screen preview window sizes, remembered across sessions, plus drag-to-resize
-- Image Fit controls and 25%–400% zoom for screenshots and diagrams
+- Normal, large, full-screen, and custom preview window sizes. Drag the visible lower-right handle to resize, or focus it and use the arrow keys; your choice is remembered.
+- Image Fit controls and gradual zoom for screenshots and diagrams, with scroll access to the entire image
 - Warnings for encrypted entries, suspicious extraction paths, and unusually high compression ratios
 - ZIP64 directory support and filename decoding for UTF-8 and legacy CP437 archives
 
@@ -43,7 +43,9 @@ The included manifest supports hosted Canvas schools at `*.instructure.com`, inc
 
 ## Developer check
 
-Run `npm test` to exercise the ZIP directory parser. There is no build step and no runtime dependency.
+Run `npm test` to exercise the ZIP directory parser. The extension has no runtime build step or runtime dependency.
+
+For a Chrome Web Store release, run `npm run build:release`. It creates a ZIP containing only extension files. The store listing copy, synthetic screenshots, and publishing checklist are in [PUBLISHING.md](PUBLISHING.md).
 
 Contributions are welcome; please use synthetic files rather than real student work. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
